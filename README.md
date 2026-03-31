@@ -72,7 +72,9 @@ Import `sqlite3` and `pandas`. Then, connect to the database in the `babe_ruth.d
 
 
 ```python
-# Your code here
+import pandas as pd
+import sqlite3
+conn= sqlite3.connect('babe_ruth.db')
 ```
 
 Now, write SQL queries to answer questions about the data in the `babe_ruth_stats` table. You can display all results using pandas for readability.
@@ -82,7 +84,7 @@ Return the total number of years that Babe Ruth played professional baseball
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT COUNT(*) AS num_of_years FROM babe_ruth_stats;""",conn)
 ```
 
 ## Seasons with NY
@@ -90,7 +92,7 @@ Return the total number of years Babe Ruth played with the NY Yankees (i.e. wher
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT COUNT(*) AS num_of_years FROM babe_ruth_stats WHERE team='NY';""",conn)
 ```
 
 ## Most Home Runs
@@ -99,7 +101,7 @@ Return the row with the most HR that Babe Ruth hit in one season.
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT * FROM babe_ruth_stats ORDER BY HR DESC LIMIT 1;""",conn)
 ```
 
 ## Least HR
@@ -107,7 +109,7 @@ Select the row with the least number of HR hit in one season.
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT * FROM babe_ruth_stats ORDER BY HR ASC LIMIT 1;""",conn)
 ```
 
 ## Total HR
@@ -115,7 +117,7 @@ Return the total number of HR hit by Babe Ruth during his career.
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT SUM(HR) AS total_num_of_hr FROM babe_ruth_stats;""",conn )
 ```
 
 ##  Five Worst HR Seasons With at Least 100 Games Played
@@ -123,7 +125,7 @@ Above you saw that Babe Ruth hit 0 home runs in his first year when he played on
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT * FROM babe_ruth_stats WHERE games > 100  ORDER BY HR ASC LIMIT 5;""",conn  )
 ```
 
 ## Average Batting Average
@@ -131,7 +133,7 @@ Select the average, `AVG`, of Ruth's batting averages.  The header of the result
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT AVG(AVG) as career_average FROM babe_ruth_stats;""",conn )
 ```
 
 ## Number of Years with Over 300 Times On Base
@@ -139,7 +141,7 @@ We want to know the years in which Ruth successfully reached base over 300 times
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT year, hits+ BB AS on_base FROM babe_ruth_stats WHERE on_base>300 ORDER BY on_base DESC;""",conn)
 ```
 
 ## Total Years and Hits Per Team
@@ -147,7 +149,7 @@ Select the total number of years played (as `num_seasons`) and total hits (as `t
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT team, COUNT(*) AS num_seasons,SUM(hits) AS total_hits FROM babe_ruth_stats GROUP BY team;""",conn)
 ```
 
 ## Teams with More than 10 Seasons
@@ -157,7 +159,7 @@ Repeat the above query, this time only including teams where he played for more 
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT team,COUNT(*) AS num_seasons FROM babe_ruth_stats GROUP BY team HAVING num_seasons>10;""",conn )
 ```
 
 ## Team with Highest Average At Bats
@@ -166,7 +168,7 @@ Select the name of the team and the average at bats per season (as `average_at_b
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT team,AVG(at_bats) AS average_at_bats FROM babe_ruth_stats GROUP BY team ORDER BY average_at_bats DESC LIMIT 1;""",conn )
 ```
 
 ## Teams with Average At Bats Over 100
@@ -175,7 +177,7 @@ Repeat the above query, this time returning all teams where the `average_at_bats
 
 
 ```python
-# Your code here
+pd.read_sql("""SELECT team,AVG(at_bats) AS average_at_bats FROM babe_ruth_stats GROUP BY team HAVING average_at_bats>100 ;""",conn)
 ```
 
 ## Summary
